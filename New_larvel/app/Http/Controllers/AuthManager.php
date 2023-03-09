@@ -6,27 +6,35 @@ use Illuminate\Http\Request;
 use Illuminate\support\Facades\Auth;
 use Illuminate\support\Facades\Hash;
 use App\models\user;
+use Session;
 
 
 class AuthManager extends Controller
 {
     function login() {
+
+if(Auth::check())
+{
+    return redirect(route('Home'));
+}
+
         return view('login');
+           }
+  
+    function registration(){
+        if(Auth::check())
+{
+    return redirect(route('Home'));
+}
+
+        return view('registration');
     }
-
-    function registation(){
-        return view('regisration');
-    }
-
-
-   function loginPost (Request $request)
+  function loginPost (Request $request)
    {
 $request-> validate([
    'email' => 'required',
    'password' => 'required'
-
 ]);
-
   $credential = $request->only('email','password');
   if(Auth::attempt($credential))
   {
@@ -34,17 +42,15 @@ $request-> validate([
    }
    return redirect(route('login'))->with("error","Log in failed" );
    }
-
 function registrationPost(Request $request)
-{
+{   
     $request-> validate([
         'name' => 'required',
         'email' => 'required|email|unique:users',
         'password' => 'required'
      
      ]);
-     
-      $data['name'] = $request -> name;
+        $data['name'] = $request -> name;
       $data['email'] = $request -> email;
 
       $data['password'] = Hash::make($request -> password);

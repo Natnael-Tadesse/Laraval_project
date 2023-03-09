@@ -1,7 +1,31 @@
 @extends('layout')
 @section('title','registration')
 @section('content')
-<div class='container'>
+<div class="container"> 
+<div class="mt-5">
+  @if($errors->any())
+  <div class="col-12">
+   @foreach($errors->any() as $error)
+<div class="alert alert-danger"> 
+  {{$errors}}
+</div>
+   @endforeach
+</div>
+  @endif
+
+  @if(session()->has('error'))
+  <div class="alert alert-danger"> 
+  {{session('error')}}
+</div>
+  @endif
+
+  @if(session()->has('sucess'))
+  <div class="alert alert-sucess"> 
+  {{session('sucess')}}
+</div>
+  @endif
+</div>
+
 <form action="{{route('registration.post')}}" method="POST" class='ms-auto me-auto mt-3' style='width:500px;'>
 @csrf
   <div class="mb-3">
